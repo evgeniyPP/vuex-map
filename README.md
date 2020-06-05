@@ -1,6 +1,4 @@
-# Vuex-Map
-
-> Add-on for Vuex to substitute default mappers.
+> **Add-on for Vuex to substitute default mappers.**
 
 - [Original issue](https://github.com/vuejs/vuex/issues/1762)
 
@@ -14,12 +12,46 @@ Similarly, `mapFunction` replaces `mapMutations` and `mapActions`. If Vuex does 
 
 > `mapData` is ready to use. `mapFunction` is still in production.
 
-### Restrictions
+### How to use?
+
+**You can use the usual vuex syntax.**
+
+#### `mapData`
+
+Use `mapData` if you want to get values from `state` or `getters`.
+
+```javascript
+computed: mapData(['text'])
+```
+
+or
+
+```javascript
+computed: {
+  ...mapData(['text'])
+}
+```
+
+#### `mapData` with modules
 
 `mapData` adds some restrictions when used with modules:
 
 - All modules have to be `namespaced: true`;
-- The only syntax available is `mapData("<module key>", { <variable>: "<getter/state key>" })`;
+- The only syntax available is 
+
+```javascript
+mapData("<module key>", { <variable>: "<getter/state key>" })
+```
+
+For example:
+
+```javascript
+computed: mapData('some/nested/module', {
+  count: 'count'
+})
+```
+
+You can still get your global module values/getters by array syntax.
 
 ### License
 
