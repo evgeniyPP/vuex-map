@@ -8,7 +8,8 @@
 var vuex = require('vuex/dist/vuex.common.js');
 
 /**
- * Works similar to mapGetters but if it does not find a getter with the given name, it looks for a value in the state
+ * Works similar to mapGetters but if it does not find a getter with the given name, 
+ * it looks for a value in the state
  * @param {String} [namespace] - Module's namespace
  * @param {Object|Array} getters
  */
@@ -20,33 +21,80 @@ var mapData = normalizeNamespace(function (namespace, data) {
   normalizeMap(data).forEach(function (ref) {
     var key = ref.key;
     var val = ref.val;
-
-    // The namespace has been mutated by normalizeNamespace
     var gettersVal = namespace + val;
     res[key] = function mappedGetter() {
       if (namespace && !getModuleByNamespace(this.$store, 'mapData', namespace)) {
         return;
       }
-
       var state = this.$store.state;
       var getters = this.$store.getters;
-
       if (gettersVal in getters) {
         return getters[gettersVal];
       }
-
       if (namespace) {
         var module = getModuleByNamespace(this.$store, 'mapData', namespace);
         state = module.context.state;
         getters = module.context.getters;
       }
-
       return typeof val === 'function' ? val.call(this, state, getters) : state[val];
     };
-    // mark vuex getter for devtools
     res[key].vuex = true;
   });
   return res;
+});
+
+/**
+ * Works similar to mapActions but if it does not find a action with the given name, 
+ * it commit a mutation with the same name
+ * @param {String} [namespace] - Module's namespace
+ * @param {Object|Array} getters
+ * @return {Object}
+ */
+var mapMethods = normalizeNamespace(function (namespace, methods) {
+  var res = {};
+  if ((process.env.NODE_ENV !== 'production') && !isValidMap(methods)) {
+    console.error(
+      '[vuex] mapMethods: mapper parameter must be either an Array or an Object'
+    );
+  }
+  normalizeMap(methods).forEach(function (ref) {
+    var key = ref.key;
+    var val = ref.val;
+    var actionsVal = namespace + val;
+    res[key] = function mappedAction() {
+      var args = [], len = arguments.length;
+      while (len--) args[len] = arguments[len];
+      // if it's an action fn stores dispatch(), else commit()
+      var fn;
+      var isAction = false;
+      var actions = this.$store._actions;
+      if (actionsVal in actions) {
+        isAction = true;
+        fn = this.$store.dispatch;
+      } else {
+        fn = this.$store.commit;
+      }
+      if (namespace) {
+        var module = getModuleByNamespace(
+          this.$store,
+          'mapMethods',
+          namespace
+        );
+        if (!module) {
+          return
+        }
+        if (isAction) {
+          fn = module.context.dispatch;
+        } else {
+          fn = module.context.commit;
+        }
+      }
+      return typeof val === 'function'
+        ? val.apply(this, [fn].concat(args))
+        : fn.apply(this.$store, [val].concat(args))
+    };
+  });
+  return res
 });
 
 /**
@@ -62,11 +110,11 @@ function normalizeMap(map) {
   }
   return Array.isArray(map)
     ? map.map(function (key) {
-        return { key: key, val: key };
-      })
+      return { key: key, val: key };
+    })
     : Object.keys(map).map(function (key) {
-        return { key: key, val: map[key] };
-      });
+      return { key: key, val: map[key] };
+    });
 }
 
 /**
@@ -119,6 +167,7 @@ var index_cjs = {
   install: vuex.install,
   version: vuex.version,
   mapData: mapData,
+  mapMethods: mapMethods
 };
 
 module.exports = index_cjs;

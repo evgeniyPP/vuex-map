@@ -1,14 +1,8 @@
 {
   "name": "vuex-map",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "Add-on for Vuex to substitute default mappers",
   "main": "index.js",
-  "files": [
-    "dist",
-    "types/index.d.ts",
-    "types/helpers.d.ts",
-    "types/vue.d.ts"
-  ],
   "scripts": {
     "test": "echo 'There is no tests yet'"
   },
