@@ -1,22 +1,23 @@
-> **Add-on for Vuex to substitute default mappers.**
-
 [![npm version](https://badge.fury.io/js/vuex-map.svg)](https://badge.fury.io/js/vuex-map)
 [![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/tterb/atomic-design-ui/blob/master/LICENSEs)
 
 - [Github repository](https://github.com/evgeniyPP/vuex-map)
 - [Original issue](https://github.com/vuejs/vuex/issues/1762)
+- [Документация на русском](https://github.com/evgeniyPP/vuex-map/blob/master/README.ru.md)
 
 ## What problems does it solve?
 
 The add-on adds two new mappers - `mapData` and `mapMethods`.
 
-`mapData` replaces `mapState` and `mapGetters`. In case Vuex store does not find a suitable getter, it looks for a value in the state and returns it.
+`mapData` replaces `mapState` and `mapGetters`. Works like `mapGetters`, but in case Vuex store does not find a suitable getter, it looks for a value in the state and returns it.
 
-Similarly, `mapMethods` replaces `mapMutations` and `mapActions`. If Vuex does not find an action with the given name, it finds a mutation with that name and commits it.
+Similarly, `mapMethods` replaces `mapMutations` and `mapActions`. Works like `mapActions`, but if Vuex does not find an action with the given name, it finds a mutation with that name and commits it.
 
 > `mapData` and `mapMethods` – these names are not settled yet. You can suggest your options in [this issue](https://github.com/evgeniyPP/vuex-map/issues/1).
 
 ## Install
+
+> Requires vuex@^3.4.0 (>=3.4.0 <4.0.0). Otherwise, it will load a copy of the appropriate version of Vuex into `node_modules`.
 
 ```bash
 npm i vuex-map
@@ -34,7 +35,7 @@ export default {
 
 **You can use the usual vuex syntax.**
 
-### `mapData`
+#### `mapData`
 
 Use `mapData` if you want to get values from `state` or `getters`.
 
@@ -50,11 +51,11 @@ computed: {
 }
 ```
 
-### `mapData` with modules
+#### `mapData` with modules
 
 `mapData` adds some restrictions when used with modules:
 
-- All modules have to be `namespaced: true`;
+- **All modules have to be `namespaced: true`**;
 - The only syntax available is 
 
 ```javascript
@@ -71,7 +72,10 @@ computed: mapData('some/nested/module', {
 
 You can still get your global module values/getters by array syntax.
 
-### `mapMethods`
+#### `mapMethods`
+
+Use `mapMethods` if you want to get methods from `mutations` or `actions`.
+
 The usual vuex syntax, nothing special.
 
 ```javascript
@@ -92,5 +96,6 @@ methods: mapMethods('some/nested/module', ['increment'])
 
 ## TODO:
 
-- Tests are coming very soon.
-- It would be nice to set up our own work environment. While we use vuex scripts.
+- Write tests (coming very soon);
+- Reduce minimum version requirements for Vuex;
+- Set up our own work environment. While we use vuex scripts.
