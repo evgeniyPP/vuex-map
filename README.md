@@ -51,27 +51,6 @@ computed: {
 }
 ```
 
-#### `mapData` with modules
-
-`mapData` adds some restrictions when used with modules:
-
-- **All modules have to be `namespaced: true`**;
-- The only syntax available is 
-
-```javascript
-mapData("<module key>", { <variable>: "<getter/state key>" })
-```
-
-For example:
-
-```javascript
-computed: mapData('some/nested/module', {
-  count: 'count'
-})
-```
-
-You can still get your global module values/getters by array syntax.
-
 #### `mapMethods`
 
 Use `mapMethods` if you want to get methods from `mutations` or `actions`.
@@ -94,8 +73,26 @@ With modules:
 methods: mapMethods('some/nested/module', ['increment'])
 ```
 
+#### `mapMethods` with function syntax
+
+There is one case where the syntax of `mapMethods` is different from `mapActions`. This is when it is used with function syntax.
+
+In the function, as the first parameter, instead of `commit` or `dispatch`, you get the `{ commit, dispatch }` object, from which you select the function you need: `commit` for commit a mutation or `dispatch` for action dispatching.
+
+For example:
+
+```javascript
+mapMethods({
+  foo({ dispatch }, arg) {
+    dispatch('increment');
+  }
+})
+```
+
+This greatly reduces the usefulness of `mapMethods`. Therefore, using `mapMethods` with function syntax is not recommended.
+
 ## TODO:
 
-- Write tests (coming very soon);
 - Reduce minimum version requirements for Vuex;
+- Add types;
 - Set up our own work environment. While we use vuex scripts.

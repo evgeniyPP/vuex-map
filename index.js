@@ -8,7 +8,7 @@
 var vuex = require('vuex/dist/vuex.common.js');
 
 /**
- * Works similar to mapGetters but if it does not find a getter with the given name, 
+ * Works similar to mapGetters but if it does not find a getter with the given name,
  * it looks for a value in the state
  * @param {String} [namespace] - Module's namespace
  * @param {Object|Array} getters
@@ -44,7 +44,7 @@ var mapData = normalizeNamespace(function (namespace, data) {
 });
 
 /**
- * Works similar to mapActions but if it does not find a action with the given name, 
+ * Works similar to mapActions but if it does not find a action with the given name,
  * it commit a mutation with the same name
  * @param {String} [namespace] - Module's namespace
  * @param {Object|Array} getters
@@ -52,10 +52,8 @@ var mapData = normalizeNamespace(function (namespace, data) {
  */
 var mapMethods = normalizeNamespace(function (namespace, methods) {
   var res = {};
-  if ((process.env.NODE_ENV !== 'production') && !isValidMap(methods)) {
-    console.error(
-      '[vuex] mapMethods: mapper parameter must be either an Array or an Object'
-    );
+  if (process.env.NODE_ENV !== 'production' && !isValidMap(methods)) {
+    console.error('[vuex] mapMethods: mapper parameter must be either an Array or an Object');
   }
   normalizeMap(methods).forEach(function (ref) {
     var key = ref.key;
@@ -66,6 +64,8 @@ var mapMethods = normalizeNamespace(function (namespace, methods) {
       while (len--) args[len] = arguments[len];
       // if it's an action fn stores dispatch(), else commit()
       var fn;
+      var commit = this.$store.commit;
+      var dispatch = this.$store.dispatch;
       var isAction = false;
       var actions = this.$store._actions;
       if (actionsVal in actions) {
@@ -75,26 +75,24 @@ var mapMethods = normalizeNamespace(function (namespace, methods) {
         fn = this.$store.commit;
       }
       if (namespace) {
-        var module = getModuleByNamespace(
-          this.$store,
-          'mapMethods',
-          namespace
-        );
+        var module = getModuleByNamespace(this.$store, 'mapMethods', namespace);
         if (!module) {
-          return
+          return;
         }
         if (isAction) {
           fn = module.context.dispatch;
         } else {
           fn = module.context.commit;
         }
+        commit = module.context.commit;
+        dispatch = module.context.dispatch;
       }
       return typeof val === 'function'
-        ? val.apply(this, [fn].concat(args))
-        : fn.apply(this.$store, [val].concat(args))
+        ? val.apply(this, [{ dispatch: dispatch, commit: commit }].concat(args))
+        : fn.apply(this.$store, [val].concat(args));
     };
   });
-  return res
+  return res;
 });
 
 /**

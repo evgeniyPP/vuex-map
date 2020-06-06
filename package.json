@@ -3,12 +3,25 @@
   "version": "0.1.0",
   "description": "Add-on for Vuex to substitute default mappers",
   "main": "index.js",
+  "files": [],
   "scripts": {
-    "test": "echo 'There is no tests yet'"
+    "test": "jest",
+    "test:mapData": "jest ./test/mapData.spec.js",
+    "test:mapMethods": "jest ./test/mapMethods.spec.js",
+    "prepublish": "npm test"
   },
   "author": "Eugene Petryankin",
   "license": "MIT",
   "dependencies": {
     "vuex": "^3.4.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.10.2",
+    "@babel/preset-env": "^7.10.2",
+    "jest": "^26.0.1",
+    "vue": "^2.6.11"
+  },
+  "eslintConfig": {
+    "root": true
   }
 }
