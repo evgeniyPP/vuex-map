@@ -17,7 +17,7 @@ Similarly, `mapMethods` replaces `mapMutations` and `mapActions`. Works like `ma
 
 ## Install
 
-> Requires vuex@^3.4.0 (>=3.4.0 <4.0.0). Otherwise, it will load a copy of the appropriate version of Vuex into `node_modules`.
+> Requires vuex@^3.0.0 (>=3.0.0 <4.0.0). Otherwise, it will load a copy of the appropriate version of Vuex into `node_modules`.
 
 ```bash
 npm i vuex-map
@@ -93,6 +93,5 @@ This greatly reduces the usefulness of `mapMethods`. Therefore, using `mapMethod
 
 ## TODO:
 
-- Reduce minimum version requirements for Vuex;
 - Add types;
 - Set up our own work environment. While we use vuex scripts.
