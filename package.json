@@ -1,13 +1,18 @@
 {
   "name": "vuex-map",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "description": "Add-on for Vuex to substitute default mappers",
-  "main": "index.js",
-  "files": [],
+  "main": "dist/vuex-map.common.js",
+  "unpkg": "dist/vuex-map.cdn.js",
+  "jsdelivr": "dist/vuex-map.cdn.js",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "test": "jest",
     "test:mapData": "jest ./test/mapData.spec.js",
     "test:mapMethods": "jest ./test/mapMethods.spec.js",
+    "test:cdn": "jest ./test/cdnVersion.spec.js",
     "prepublish": "npm test"
   },
   "author": "Eugene Petryankin",

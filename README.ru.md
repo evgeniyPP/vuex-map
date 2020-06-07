@@ -29,6 +29,20 @@ export default {
 }
 ```
 
+Вы также можете использовать CDN.
+
+```html
+<!-- Development версия -->
+<script src="https://unpkg.com/vuex-map"></script>
+
+<!-- Production версия -->
+<script src="https://cdn.jsdelivr.net/npm/vuex-map/dist/vuex-map.cdn.min.js"></script>
+```
+
+Методы будут доступны вам как `VuexMap.mapData` и `VuexMap.mapMethods`.
+
+Вы можете посмотреть простейший пример [здесь](https://codesandbox.io/s/vuex-map-cdn-example-tmmig).
+
 ## Использование
 
 **Можете использовать обычный Vuex синтаксис.**
